@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block extra_css %}
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    .nushu-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 30px;
+    }
+    .nushu-text {
+        flex: 1;
+        padding: 0 20px;
+    }
+    .nushu-symbols {
+        text-align: center;
+        flex: 1;
+    }
+    .symbol {
+        font-size: 100px;
+        line-height: 1;
+    }
+    .project-title {
+        text-align: center;
+        margin: 40px 0 20px;
+    }
+    .center-btn {
+        text-align: center;
+        margin-top: 30px;
+    }
+    .pixelated {
+        font-family: monospace;
+        white-space: pre;
+        line-height: 1;
+        font-size: 14px;
+    }
+</style>
+{% endblock %}
+
+{% block header %}AI女书 (AI Nüshu){% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="header">
+        <h1>AI女书 (AI Nüshu)</h1>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="video-container">
+            <iframe width="640" height="480" src="https://www.youtube.com/embed/L3UtjqFNgwU" title="AI Nüshu" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <!-- <video autoplay loop muted playsinline>
+                <source src="{{ url_for('static', filename='videos/intro.mp4') }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video> -->
+        </div>
+
+        <div class="description-box">
+            <h2>Nüshu (女书)</h2>
+            <p>Nüshu (女书), a unique language created and used exclusively by women in Hunan Province, China, for centuries to communicate Chinese in a world where they were denied formal education.</p>
+            
+            <p>Can AI learn from ancient Chinese women and create their own secret language?</p>
+            
+            <p>This project trains AI agents to imitate illiterate women in ancient China to create a new language system, symbolizing the defiance of patriarchal constraints and the emergence of language in a non-Western, feminist context.</p>
+
+            <a href="/see" class="start-btn">开始探索 (Start)</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

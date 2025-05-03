@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nüshu Dictionary</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/globals.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inknut': ['Inknut Antiqua', 'serif'],
+                        'xique': ['XiQue YanShuTi', 'serif'],
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-black text-[#FFFDE9] min-h-screen p-8 font-inknut">
+    <!-- Background image container -->
+    <div class="absolute inset-0 w-full h-full -z-50">
+        <img src="{{ url_for('static', filename='images/bg 2.png') }}" alt="Background"
+            class="w-full h-full object-cover opacity-70">
+    </div>
+
+    <div class="max-w-[1800px] mx-auto">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold mb-4">Nüshu Character Dictionary</h1>
+            <p class="text-xl opacity-80">Explore the collection of AI-generated Nüshu characters</p>
+        </div>
+        
+        <div class="flex justify-between items-center mb-8">
+            <input type="text" id="search-input" placeholder="Search characters..." 
+                class="w-64 px-4 py-2 rounded-full border-2 border-dashed border-[#FFFDE9] bg-transparent text-[#FFFDE9] placeholder-[#FFFDE9] focus:outline-none">
+            <div class="flex items-center gap-4">
+                <button id="prev-page" 
+                    class="px-6 py-2 rounded-full border-2 border-dashed border-[#FFFDE9] bg-transparent hover:bg-[rgba(255,251,233,0.1)] disabled:opacity-50 disabled:cursor-not-allowed">
+                    Previous
+                </button>
+                <span id="page-info" class="text-lg">Page 1</span>
+                <button id="next-page"
+                    class="px-6 py-2 rounded-full border-2 border-dashed border-[#FFFDE9] bg-transparent hover:bg-[rgba(255,251,233,0.1)] disabled:opacity-50 disabled:cursor-not-allowed">
+                    Next
+                </button>
+            </div>
+        </div>
+        
+        <div id="dictionary-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-10 gap-3">
+            <div class="text-center col-span-full py-8">Loading dictionary...</div>
+        </div>
+    </div>
+
+    <script>
+        // Constants
+        const ITEMS_PER_PAGE = 20; // 10 columns × 2 rows
+        let currentPage = 1;
+        let currentDictionary = {};
+        let filteredDictionary = {};
+        
+        // Function to generate image path from dimensions
+        function getImagePath(dimensions) {
+            return `{{ url_for('static', filename='nvshu_images/combined_') }}${dimensions[0]}-${dimensions[1]}-${dimensions[2]}_vertical.png`;
+        }
+
+        // Function to render dictionary grid for current page
+        function renderCurrentPage() {
+            const grid = document.getElementById('dictionary-grid');
+            grid.innerHTML = '';
+            
+            const dictToRender = Object.keys(filteredDictionary).length > 0 ? filteredDictionary : currentDictionary;
+            const totalChars = Object.keys(dictToRender).length;
+            
+            if (totalChars === 0) {
+                grid.innerHTML = '<div class="text-center col-span-full py-8">No characters found</div>';
+                return;
+            }
+            
+            // Sort characters alphabetically
+            const sortedCharacters = Object.keys(dictToRender).sort();
+            
+            // Calculate pagination
+            const totalPages = Math.ceil(totalChars / ITEMS_PER_PAGE);
+            const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+            const endIdx = Math.min(startIdx + ITEMS_PER_PAGE, totalChars);
+            const charsToShow = sortedCharacters.slice(startIdx, endIdx);
+            
+            // Update page info
+            document.getElementById('page-info').textContent = 
+                `Page ${currentPage} of ${totalPages} (${totalChars} total)`;
+            
+            // Disable/enable pagination buttons
+            document.getElementById('prev-page').disabled = currentPage <= 1;
+            document.getElementById('next-page').disabled = currentPage >= totalPages;
+            
+            // Render characters
+            charsToShow.forEach(char => {
+                const dimensions = dictToRender[char];
+                const imagePath = getImagePath(dimensions);
+                
+                const characterElement = document.createElement('div');
+                characterElement.className = 'border-2 border-dashed border-[#FFFDE9] rounded-lg p-2 flex flex-col items-center bg-[rgba(255,251,233,0.1)]';
+                characterElement.innerHTML = `
+                    <div class="flex flex-col items-center gap-1 w-full">
+                        <div class="text-lg font-xique text-xl">${char}</div>
+                        <img src="${imagePath}" alt="Nüshu character for ${char}" class="w-20 h-20 object-contain" loading="lazy">
+                        <div class="text-xs opacity-80">${dimensions.join('-')}</div>
+                    </div>
+                `;
+                
+                grid.appendChild(characterElement);
+            });
+        }
+
+        // Function to load dictionary from server
+        async function loadDictionary() {
+            try {
+                const response = await fetch('/get_dictionary');
+                if (!response.ok) {
+                    throw new Error('Failed to load dictionary');
+                }
+                currentDictionary = await response.json();
+                filteredDictionary = {};
+                currentPage = 1;
+                renderCurrentPage();
+            } catch (error) {
+                console.error('Error loading dictionary:', error);
+                document.getElementById('dictionary-grid').innerHTML = 
+                    '<div class="text-center col-span-full py-8 text-red-400">Failed to load dictionary. Please try again later.</div>';
+            }
+        }
+
+        // Search functionality
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.trim().toLowerCase();
+            
+            if (searchTerm === '') {
+                filteredDictionary = {};
+            } else {
+                filteredDictionary = Object.fromEntries(
+                    Object.entries(currentDictionary)
+                        .filter(([char]) => char.toLowerCase().includes(searchTerm))
+                );
+            }
+            
+            currentPage = 1;
+            renderCurrentPage();
+        });
+
+        // Pagination controls
+        document.getElementById('prev-page').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderCurrentPage();
+            }
+        });
+
+        document.getElementById('next-page').addEventListener('click', () => {
+            const dictToRender = Object.keys(filteredDictionary).length > 0 ? filteredDictionary : currentDictionary;
+            const totalPages = Math.ceil(Object.keys(dictToRender).length / ITEMS_PER_PAGE);
+            
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderCurrentPage();
+            }
+        });
+
+        // Initialize the dictionary when page loads
+        document.addEventListener('DOMContentLoaded', loadDictionary);
+    </script>
+</body>
+</html>

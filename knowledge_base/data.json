@@ -1,0 +1,13 @@
+{
+    "9850413496": {
+        "image_url": "https://example.com/new_image1.jpg",
+        "chinese_word": "歌",
+        "translation": "song",
+        "vector_3d": [
+            0.9,
+            0.8,
+            0.7
+        ],
+        "creator_name": "newUser"
+    }
+}

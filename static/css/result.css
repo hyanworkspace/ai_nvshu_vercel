@@ -1,0 +1,98 @@
+/* 基础样式 */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #fffde9;
+}
+
+.result-container {
+    display: flex;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgb(0, 0, 0);
+    border-radius: 8px;
+    border: 2px dotted #fffde9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.left-section {
+    flex: 1;
+    padding-right: 30px;
+    border-right: 2px dotted #ddd;
+}
+
+.right-section {
+    flex: 1;
+    padding-left: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.media-container {
+    margin-bottom: 20px;
+}
+
+.result-media {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.congratulations {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.congratulations h1 {
+    color: #fffde9;
+    font-size: 2.2em;
+}
+
+.user-input {
+    text-align: center;
+}
+
+.user-input p {
+    font-size: 1.2em;
+    margin-bottom: 15px;
+}
+
+#user-name {
+    padding: 10px;
+    width: 80%;
+    margin-bottom: 15px;
+    border: 2px dotted #fffde9;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+#save-btn {
+    padding: 10px 25px;
+    background-color: #4a6fa5;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#save-btn:hover {
+    background-color: #3a5a80;
+}
+
+.dimensions-container {
+    background-color: #000000;
+    padding: 15px;
+    border: 2px dotted #fffde9;
+    border-radius: 4px;
+    margin-top: 20px;
+}
+
+.dimensions-container h3 {
+    margin-top: 0;
+    color: #4a6fa5;
+}

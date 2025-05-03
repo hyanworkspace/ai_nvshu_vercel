@@ -1,0 +1,332 @@
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Times New Roman', serif;
+}
+
+body {
+    background-color: #000;
+    color: #333;
+    position: relative;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* 背景样式 */
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.4;
+    background-size: cover;
+    background-position: center;
+}
+
+.nvshu-characters {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none;
+    color: white;
+    font-size: 50px;
+    overflow: hidden;
+}
+
+/* 容器样式 */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+/* 标题样式 */
+h1 {
+    color: #fff;
+    margin-bottom: 20px;
+    font-size: 36px;
+    letter-spacing: 1px;
+}
+
+h2 {
+    color: #fff;
+    margin-bottom: 50px;
+    font-size: 24px;
+    font-weight: normal;
+    letter-spacing: 0.5px;
+}
+
+/* 选项区域样式 */
+.options-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 60px;
+    margin-top: 40px;
+}
+
+.option-circle {
+    width: 370px;
+    height: 370px;
+    border-radius: 50%;
+    background-color: #F5F0DF;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 2px dotted #666;
+}
+
+.option-circle:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.option-circle .dotted-border {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 50%;
+    border: 2px dotted #333;
+    pointer-events: none;
+}
+
+.icon {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 30px;
+}
+
+.option-text {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.option-subtext {
+    font-size: 16px;
+    color: #666;
+    margin-top: 10px;
+    line-height: 1.5;
+}
+
+
+/* 隐藏文件输入 */
+#fileInput {
+    display: none;
+}
+
+/* 隐藏录制视频元素 */
+#videoRecorder {
+    display: none;
+}
+
+/* 添加到你的style部分 */
+video {
+    aspect-ratio: 16/9; /* 或你需要的比例 */
+    object-fit: contain; /* 保持比例同时适应容器 */
+  }
+  
+/* 隐藏确认页面 */
+.confirmation-page {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    z-index: 10;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 隐私政策弹窗 */
+.privacy-policy {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 800px;
+    background-color: #F5F0DF;
+    border-radius: 20px;
+    padding: 30px;
+    z-index: 100;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.privacy-policy h3 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
+}
+
+.privacy-policy p {
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 16px;
+    line-height: 1.6;
+    text-align: left;
+}
+
+.privacy-policy ul {
+    text-align: left;
+    margin: 15px 0;
+    padding-left: 20px;
+}
+
+.privacy-policy li {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* 确认页面视频容器 */
+.video-container {
+    width: 370px;
+    height: 370px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 30px;
+    position: relative;
+    border: 2px dotted #666;
+}
+
+.video-container .dotted-border {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 50%;
+    border: 2px dotted #333;
+    pointer-events: none;
+}
+.video-container video, .video-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 按钮样式 */
+.button-container {
+    display: flex;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.button {
+    padding: 12px 30px;
+    background-color: #666;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s;
+    border: 1px dotted #999;
+}
+
+.button:hover {
+    background-color: #888;
+}
+
+.confirmation-text {
+    color: white;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+/* 响应式样式 */
+@media (max-width: 900px) {
+    .options-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .option-circle {
+        width: 300px;
+        height: 300px;
+        margin-bottom: 30px;
+    }
+    
+    .video-container {
+        width: 300px;
+        height: 300px;
+    }
+}
+
+@media (max-width: 500px) {
+    .option-circle {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .video-container {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .icon {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 15px;
+    }
+    
+    .option-text {
+        font-size: 20px;
+    }
+    
+    .option-subtext {
+        font-size: 14px;
+    }
+}
+
+
+.record-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.record-btn {
+    padding: 8px 16px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 2px dotted #666;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.record-btn:hover {
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.record-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,191 @@
+body {
+    margin: 0;
+    padding: 20px;
+    background-color: #fffde9;
+}
+.container {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 20px;
+}
+.left-panel, .right-panel {
+    flex: 1;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+video {
+    width: 100%;
+    border-radius: 4px;
+}
+.content-area {
+    min-height: 300px;
+}
+.title {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    color: #fffde97c;
+}
+.description {
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+.status-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 2px dotted #eee;
+}
+.status-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+.status-icon {
+    margin-right: 10px;
+    font-size: 1.2em;
+    min-width: 20px;
+}
+.status-text {
+    flex: 1;
+}
+.completed .status-icon {
+    color: #4CAF50;
+}
+.active .status-icon {
+    color: #2196F3;
+    font-weight: bold;
+}
+.pending .status-icon {
+    color: #9E9E9E;
+}
+.poem {
+    white-space: pre-line;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+.language-section {
+    margin-bottom: 30px;
+}
+.language-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+.toggle-content {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    display: none;
+}
+.toggle-button {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 0.9em;
+    padding: 5px 0;
+    margin-top: 5px;
+    text-decoration: underline;
+}
+.toggle-button:hover {
+    color: #333;
+}
+.typing-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 1em;
+    background-color: #333;
+    animation: blink 1s infinite;
+    vertical-align: middle;
+    margin-left: 2px;
+}
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* Styles for the left panel circle */
+.left-panel-circle {
+    width: 70%; /* Adjust as needed, maybe a fixed width like 400px? */
+    aspect-ratio: 1 / 1; /* Make it a circle */
+    background-color: #F5F0DF; /* Light yellow background */
+    border-radius: 50%; /* Make it round */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto; /* Center the circle horizontally */
+    padding: 20px; /* Add some padding inside the circle */
+    box-sizing: border-box; /* Include padding in width/height */
+}
+
+.circle-content-area {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center; /* Center text */
+    color: #000000; /* Black text */
+    overflow-y: auto; /* Add scroll if content overflows */
+}
+
+/* Ensure video fits within the circle */
+.circle-content-area video {
+    max-width: 90%; /* Limit video width */
+    max-height: 90%; /* Limit video height */
+    border-radius: 8px; /* Optional: slightly rounded corners for video */
+}
+
+/* Ensure text elements within the circle are black */
+.circle-content-area .description,
+.circle-content-area .language-label {
+    color: #000000 !important; /* Force black text */
+    /* Font family is now handled by specific selectors above */
+}
+
+/* Apply Chinese font within the circle's Chinese section */
+.circle-content-area #chinese-desc {
+    color: #000000 !important;
+}
+
+/* Apply English font within the circle's English section */
+.circle-content-area #english-desc {
+    color: #000000 !important;
+}
+
+/* Adjustments when agreed-style is active */
+body.agreed-style .left-panel-circle {
+    background-color: rgba(245, 240, 223, 0.9); /* Slightly transparent light yellow */
+}
+
+body.agreed-style .circle-content-area,
+body.agreed-style .circle-content-area .description,
+body.agreed-style .circle-content-area .language-label {
+    color: #000000 !important; 
+    /* Keep text black even with agreed style */
+}
+
+/* Apply Chinese font to Chinese description and poem */
+#chinese-desc,
+.poem-chinese {
+    color: #000000;
+}
+
+/* Ensure English sections use the default Inknut font */
+#english-desc,
+.poem-english {
+    color: #000000;
+}
+
+/* Specific styling for poem text if needed */
+.poem pre {
+    white-space: pre-line;
+    line-height: 1.8;
+    margin-bottom: 20px; /* Adjusted margin */
+}

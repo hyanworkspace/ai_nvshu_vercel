@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nüshu Character Created</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/globals.css') }}">
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/result.css') }}"> -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-black min-h-screen">
+    <!-- Background image container -->
+    <div class="absolute inset-0 w-full h-full -z-50">
+        <img src="{{ url_for('static', filename='images/bg 2.png') }}" alt="Background"
+            class="w-full h-full object-cover opacity-70">
+    </div>
+    <div class="container mx-auto px-4 py-8 flex flex-wrap items-center justify-center gap-4 h-screen">
+        <!-- 左边区域 -->
+        <div class="flex-1 flex flex-col items-center gap-4">
+            <!-- 视频和字符的容器 -->
+            <div class="relative flex flex-col items-center isolate">
+                <!-- 视频圆形容器-底部 -->
+                <div class="absolute w-72 h-72 z-10 grayscale invert rounded-full mask-radial-fading radial-fade">
+                    {% if video_url %}
+                    <video class="mask-image-radial-fading" src="{{ video_url }}" alt="Generated video" class="w-full h-full object-cover" 
+                         muted playsinline autoplay>
+                    </video>
+                    {% else %}
+                    <p>No video available</p>
+                    {% endif %}
+                </div>
+
+                <!-- 女书字符中间层 -->
+                <div class="absolute flex items-center justify-center" style="top: -70px; z-index: 15;">
+                    <img src="{{ char_img_path }}" alt="Generated Nüshu Character"
+                        class="w-[90%] h-[90%] object-contain mix-blend-difference justify-center">
+                </div>
+
+                <!-- TODO 要修改/美化的 -->
+                <p>"{{ char_translate }}"</p>
+
+                <!-- 顶部圆形 -->
+                <div class="absolute w-72 h-72 z-20 inset-0 rounded-full radial-fade mix-blend-difference" ></div>
+
+                <!-- 占位div确保容器高度 -->
+                <div class="w-72 h-72 invisible"></div>
+            </div>
+
+            <!-- 显示char_3dim -->
+            <div class="pt-20 mt-2 text-center text-[#FFFDE9] text-sm mt-4 opacity-50">
+                {% if char_3dim %}
+                <p>{{ char_3dim[0] }}, {{ char_3dim[1] }}, {{ char_3dim[2] }}</p>
+                {% else %}
+                <p>No dimensions data available</p>
+                {% endif %}
+                <h3>3D Dimensions</h3>
+            </div>
+        </div>
+
+        <!-- Right side - Text content -->
+        <div class="flex-1 text-[#FFFDE9]">
+            <div class="space-y-8">
+                <h1 class="text-4xl font-semibold mb-6">Congratulations!</h1>
+                <p class="text-2xl mb-6">You've created a new AI<br>Nvshu character :)</p>
+                <div class="space-y-4">
+                    <p class="text-2xl">Could you tell me your name?</p>
+                    <input type="text" id="user-name" placeholder="Enter your name"
+                        class="bg-transparent border-b-2 border-[#FFFDE9] border-opacity-50 text-[#FFFDE9] placeholder-[#FFFDE9] placeholder-opacity-50 focus:outline-none focus:border-opacity-100 px-2 py-1">
+                    <button id="save-btn"
+                        class="bg-[#FFFDE9] text-black px-4 py-2 rounded transition duration-200 hover:bg-[#fffde9cc]">
+                        Save
+                    </button>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/result.js') }}"></script>
+</body>
+
+</html>

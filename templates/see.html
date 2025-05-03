@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 女书</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <link href="{{ url_for('static', filename='css/globals.css') }}" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div class="relative w-screen h-screen bg-black text-white overflow-hidden">
+        <!-- Background image container -->
+        <div class="absolute inset-0 w-screen h-screen">
+            <img src="{{ url_for('static', filename='images/bg1.png') }}" 
+                 alt="Background"
+                 class="w-full h-full object-cover">
+        </div>
+
+        <!-- Nvshu overlay image with blend mode -->
+        <div class="absolute inset-0 w-screen h-screen">
+            <img src="{{ url_for('static', filename='images/nvshu1.png') }}"
+                 alt="Nvshu Pattern"
+                 class="w-full h-full object-contain mix-blend-difference">
+        </div>
+
+        <!-- Main content -->
+        <div class="relative z-10 h-full w-full flex flex-row items-center justify-center">
+            <!-- Circles Container for symmetrical alignment -->
+            <div class="flex flex-row items-center justify-center gap-[min(60px,3vw)] w-full max-w-[1920px] px-[min(60px,3vw)]">
+                <!-- Video Recording Circle -->
+                <div class="relative group w-[25vw] max-w-[640px]" id="recordOption">
+                    <div class="aspect-square w-full rounded-full bg-[radial-gradient(circle_at_center,rgba(255,251,233,0.9)_70%,rgba(255,251,233,0)_100%)] flex flex-col items-center justify-center cursor-pointer transition-transform transform hover:scale-105">
+                        <!-- Inner dotted circle -->
+                        <div class="absolute w-[86.7%] h-[86.7%] rounded-full border-[3px] border-dotted border-black rotating-border"></div>
+                        <div class="mb-1 w-[min(100px,20%)] h-[min(100px,20%)] relative">
+                            <img src="{{ url_for('static', filename='images/cameraIcon.png') }}"
+                                 alt="Camera icon"
+                                 class="w-full h-full object-contain">
+                        </div>
+                        <p class="text-gray-700 text-center text-[min(1.2rem,1.6vw)] leading-none font-medium">Click to record a video</p>
+                        
+                        <!-- 录制时显示的视频预览 -->
+                            <video id="recordPreview" autoplay muted playsinline 
+                                class="hidden w-full h-full absolute inset-0 rounded-full object-cover"></video>
+                        
+                        <!-- 录制控制按钮 -->
+                        <div class="record-controls hidden absolute bottom-5 z-20 flex gap-2">
+                            <button id="startRecordBtn" class="bg-primary/80 hover:bg-primary text-black px-4 py-2 rounded-full text-sm">Start Recording</button>
+                            <button id="stopRecordBtn" class="hidden bg-red-500/80 hover:bg-red-500 text-white px-4 py-2 rounded-full text-sm">Stop Recording</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- File Upload Circle -->
+                <div class="relative group w-[25vw] max-w-[640px]" id="uploadOption">
+                    <div class="aspect-square w-full rounded-full bg-[radial-gradient(circle_at_center,rgba(255,251,233,0.9)_70%,rgba(255,251,233,0)_100%)] flex flex-col items-center justify-center cursor-pointer transition-transform transform hover:scale-105">
+                        <!-- Inner dotted circle -->
+                        <div class="absolute w-[86.7%] h-[86.7%] rounded-full border-[3px] border-dotted border-black rotating-border"></div>
+                        <div class="mb-1 w-[min(100px,20%)] h-[min(100px,20%)] relative">
+                            <img src="{{ url_for('static', filename='images/uploadImageIcon.png') }}"
+                                 alt="Upload icon"
+                                 class="w-full h-full object-contain">
+                        </div>
+                        <p class="text-gray-700 text-center text-[min(1.2rem,1.6vw)] leading-none font-medium">Drag to here or browse files</p>
+                        <div class="space-y-0">
+                            <p class="text-gray-500 text-[min(0.7rem,1.2vw)] mt-1 font-light leading-none">Supported format:</p>
+                            <p class="text-gray-500 text-[min(0.7rem,1.2vw)] font-light leading-none">MP4, PNG, JPG</p>
+                            <p class="text-gray-500 text-[min(0.7rem,1.2vw)] font-light leading-none">(Max 5mb each)</p>
+                        </div>
+                        <input type="file" id="fileInput" accept="video/mp4,image/png,image/jpeg" class="hidden">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 隐藏的视频录制元素 -->
+    <video id="videoRecorder" autoplay muted class="hidden aspect-video"></video>
+
+
+    <!-- 确认页面 -->
+    <div class="fixed inset-0 bg-black text-white overflow-hidden font-inknut hidden" id="confirmationPage">
+        <!-- Background image container -->
+        <div class="absolute inset-0 w-screen h-screen">
+            <img src="{{ url_for('static', filename='images/bg1.png') }}"
+                 alt="Background"
+                 class="w-full h-full object-cover">
+        </div>
+
+        <!-- Nvshu overlay image with blend mode -->
+        <div class="absolute inset-0 w-screen h-screen">
+            <img src="{{ url_for('static', filename='images/NvshuBG1.png') }}"
+                 alt="Nvshu Pattern Background"
+                 class="w-full h-full object-contain mix-blend-difference">
+        </div>
+
+        <!-- Main content -->
+        <div class="relative z-10 h-full w-full flex flex-col items-center justify-center">
+            <!-- Privacy statement -->
+            <p class="text-center text-[min(1.2rem,1.6vw)] mb-6 text-[rgb(255,251,233)]">
+                By uploading, you agree to our Privacy & Data Usage Statement
+            </p>
+
+            <!-- Preview Circle -->
+            <div class="relative w-[25vw] max-w-[640px] mb-10" id="previewContainer">
+                <div class="aspect-square w-full rounded-full bg-[rgba(255,251,233,0.9)] flex items-center justify-center overflow-hidden">
+                    <!-- Inner dotted circle -->
+                    <div class="absolute w-[86.7%] h-[86.7%] rounded-full border-[3px] border-dotted border-black rotating-border"></div>
+
+                    <!-- Video preview -->
+                    <!-- <video id="videoPreview" autoplay loop class="w-full h-full absolute inset-0 rounded-full object-cover mix-blend-exclusion"></video> -->
+                    <video id="videoPreview" autoplay loop class="w-full h-full absolute inset-0 rounded-full object-cover"></video>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="flex flex-row justify-between w-full max-w-[40vw] mt-4">
+                <div>
+                    <button id="reUploadBtn" class="w-full max-w-[20vw] px-10 py-2 rounded-[30px] border-[3px] border-dashed border-[rgb(255,251,233)] bg-[rgba(255,251,233,0.4)] text-[rgb(255,251,233)] font-inknut" style="padding: 0.1rem 1rem; width: 100%;">
+                        Re-Upload
+                    </button>
+                </div>
+                <div>
+                    <button id="confirmBtn" class="w-full max-w-[20vw] px-10 py-2 rounded-[30px] border-[3px] border-dashed border-[rgb(255,251,233)] bg-[rgba(255,251,233,0.4)] text-[rgb(255,251,233)] font-inknut" style="padding: 0.1rem 1rem; width: 100%;">
+                        Confirm
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 隐私政策弹窗 -->
+    <div id="privacyPolicy" class="fixed inset-0 z-50 hidden flex items-center justify-center">
+        <!-- 半透明背景 -->
+        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+        
+        <!-- 弹窗内容 -->
+        <div class="relative z-10 w-[600px] bg-[rgba(0,0,0,0.8)] rounded-[30px] border-[3px] border-dashed border-[rgb(255,251,233)] overflow-hidden">
+            <!-- 标题和内容区域 -->
+            <div class="max-h-[300px] overflow-y-auto px-8 py-6 text-[rgb(255,251,233)] custom-scrollbar">
+                <h3 class="text-xl font-medium mb-4">Privacy & Data Usage Statement</h3>
+                <p class="text-sm leading-relaxed">
+                    We respect your privacy and are committed to protecting your personal information. When you upload an image or video for this interactive experience, your content is used solely for generating the artistic response. We do not store or share your content with third parties, and all uploaded content is automatically deleted after processing. No personal identification information is collected.
+                </p>
+            </div>
+            
+            <!-- 按钮容器 -->
+            <div class="border-t border-[rgb(255,251,233)] border-opacity-20 px-8 py-4 flex justify-center">
+                <button id="agreeBtn" class="w-full max-w-[20vw] px-10 py-2 rounded-[30px] border-[3px] border-dashed border-[rgb(255,251,233)] bg-[rgba(255,251,233,0.4)] text-[rgb(255,251,233)] font-inknut" style="padding: 0.1rem 1rem;">
+                    Yes, I agree!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 251, 233, 0.1);
+            border-radius: 3px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 251, 233, 0.3);
+            border-radius: 3px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 251, 233, 0.5);
+        }
+    </style>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/see.js') }}"></script>
+</body>
+</html>

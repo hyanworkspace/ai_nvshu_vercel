@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Development</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/globals.css') }}">
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/guess.css') }}"> -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-black m-0 p-5 flex flex-col items-center min-h-screen">
+    <!-- Background image container -->
+    <div class="absolute inset-0 w-full h-full -z-50">
+        <img src="{{ url_for('static', filename='images/bg 2.png') }}" alt="Background"
+            class="w-full h-full object-cover opacity-70">
+    </div>
+
+    <!-- Header section with fixed height -->
+    <div class="h-[100px] flex items-center justify-center">
+        <h1 class="text-[#FFFDE9] text-3xl hidden" id="consensus-title">Consensus Reached!</h1>
+    </div>
+
+    <!-- Main content container -->
+    <div class="flex items-center justify-center gap-[min(40px,2vw)] w-full max-w-[1920px] px-[min(40px,2vw)]">
+        <!-- Left Circle - Speaker -->
+        <div class="flex-1 flex flex-col items-center">
+            <div class="w-[30vw] min-w-[280px] max-w-[500px]">
+                <div class="aspect-square w-full rounded-full radial-fade-small flex items-center justify-center relative">
+                    <div class="text-4xl p-20 text-center leading-relaxed text-black vertical-text" id="original-text"></div>
+                </div>
+            </div>
+            <div class="text-[#FFFDE9] text-xl mt-4 opacity-50">Speaker</div>
+        </div>
+
+        <!-- Center Content -->
+        <div class="flex flex-col items-center justify-center space-y-24 relative w-full max-w-[300px]">
+            <!-- Encoding text -->
+            <div id="encoding-text" class="absolute left-1/4 -translate-x-1/4 top-0 animate-breathing">
+                <div class="text-[#FFFDE9] text-2xl">Encoding...</div>
+                <div class="text-[#FFFDE9] text-sm opacity-60">
+                    a character into an AI Nushu Symbol
+                </div>
+            </div>
+
+            <!-- Guessing text -->
+            <div id="guessing-text" class="absolute right-1/4 translate-x-1/4 bottom-0 animate-breathing" style="animation-delay: 1.5s;">
+                <div class="text-[#FFFDE9] text-2xl text-right">Guessing...</div>
+                <div class="text-[#FFFDE9] text-sm opacity-60 text-right">
+                    the computational meaning
+                </div>
+            </div>
+
+            <div id="loading" class="text-[#FFFDE9] text-lg hidden">Processing<br> poem...</div>
+            <div id="char-image-container" class="w-1/2 h-1/2 mb-4 flex items-center justify-center">
+                <!-- Character image will be displayed here -->
+            </div>
+            <!-- Button container with fixed spacing -->
+            <div id="button-container" class="h-1/4 flex items-center justify-center">
+                <!-- Button will be added here by JavaScript -->
+            </div>
+        </div>
+        <!-- Right Circle - Listener -->
+        <div class="flex-1 flex flex-col items-center">
+            <div class="w-[30vw] min-w-[280px] max-w-[500px]">
+                <div class="aspect-square w-full rounded-full radial-fade-listener flex items-center justify-center relative">
+                    <!-- <div class="text-4xl p-12 text-center leading-relaxed text-black" id="revealing-text"></div> -->
+                    <!-- <div class="text-4xl p-20 text-center leading-relaxed text-black vertical-text" id="revealing-text"></div> -->
+                    <div class="text-4xl p-20 text-center leading-relaxed text-black vertical-text" id="revealing-text" style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.2em;"></div>
+                </div>
+            </div>
+            <div class="text-[#FFFDE9] text-xl mt-4 opacity-50">Listener</div>
+        </div>
+    </div>
+
+    <style>
+        /* Keep only the necessary custom styles that can't be achieved with Tailwind */
+        .highlight {
+            color: #d50000;
+            font-weight: bold;
+            position: relative;
+        }
+        
+        .highlight::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background-color: #d80000;
+        }
+
+        /* Chinese text font */
+        #chinese-desc,
+        .poem-chinese {
+            font-family: 'XiQue YanShuTi', var(--font-inknut), serif;
+        }
+
+        /* English text font */
+        #english-desc,
+        .poem-english {
+            font-family: var(--font-inknut), serif;
+        }
+
+        @keyframes breathing {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .animate-breathing {
+            animation: breathing 3s ease-in-out infinite;
+        }
+    </style>
+
+    <script src="{{ url_for('static', filename='js/guess.js') }}"></script>
+</body>
+
+</html>
