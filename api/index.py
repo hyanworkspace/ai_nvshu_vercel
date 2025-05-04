@@ -2,40 +2,33 @@ from flask import Flask, render_template, request, jsonify, session, send_from_d
 import os
 import uuid
 from werkzeug.utils import secure_filename
-from config import Config
-from ai_nvshu_functions import find_similar, recognize_and_translate, create_new_poem, create_nvshu_from_poem, create_combined_nvshu_image, replace_with_simple_el, get_char_translate
-from utils import load_dict_from_file
-from process_video import pixelate
-# from huggingface_hub import login
-# import logging
+import sys
 
-# 设置日志配置
-# logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+# 添加项目根目录到 Python 路径，确保可以导入其他模块
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-app = Flask(__name__)
+from app.config import Config
+from app.ai_nvshu_functions import find_similar, recognize_and_translate, create_new_poem, create_nvshu_from_poem, create_combined_nvshu_image, replace_with_simple_el, get_char_translate
+from app.utils import load_dict_from_file
+from app.process_video import pixelate
+
+app = Flask(__name__, 
+            static_folder='../public',     # 改为使用 public 目录作为静态文件夹
+            template_folder='../templates' # 模板目录保持不变
+           )
 app.secret_key = 'a-secret-key'
-# app.secret_key = os.environ.get('SECRET_KEY', 'a-secret-key')  # 使用环境变量中的密钥
-# # 登录 Hugging Face
-# huggingface_token = os.environ.get('HUGGINGFACE_TOKEN')
-# if huggingface_token:
-#     login(token=huggingface_token)
 
 # 使用 Config 类中的配置
 app.config['UPLOAD_FOLDER'] = Config.UPLOAD_FOLDER
 app.config['DICTIONARY_PATH'] = Config.DICTIONARY_PATH
 
-
-# 确保上传目录存在
-if not os.path.exists(Config.UPLOAD_FOLDER):
-    os.makedirs(Config.UPLOAD_FOLDER) 
+os.makedirs(Config.UPLOAD_FOLDER, exist_ok=True)
 
 
 # 允许的文件类型
-ALLOWED_EXTENSIONS = Config.ALLOWED_EXTENSIONS
-
 def allowed_file(filename):
     # return True/False
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in Config.ALLOWED_EXTENSIONS
 
 @app.before_request
 def before_request():
@@ -44,42 +37,17 @@ def before_request():
         session['session_id'] = str(uuid.uuid4())
 
 @app.route('/')
-def index():
+def home():
     return render_template('see.html')
 
 @app.route('/see')
 def see():
     return render_template('see.html')
 
-# @app.route('/upload', methods=['POST'])
-# def upload_file():
-#     if 'file' not in request.files:
-#         return jsonify({'error': '没有文件'}), 400
-    
-#     file = request.files['file']
-#     if file.filename == '':
-#         return jsonify({'error': '没有选择文件'}), 400
-    
-#     if file and allowed_file(file.filename):
-#         # 生成唯一的文件名
-#         original_filename = secure_filename(file.filename)
-#         file_extension = original_filename.rsplit('.', 1)[1].lower()
-#         unique_filename = f"{str(uuid.uuid4())}.{file_extension}"
-        
-#         # 保存文件
-#         file_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
-#         file.save(file_path)
-        
-#         # 生成文件URL
-#         file_url = f'/uploads/{unique_filename}'
-#         session['video_url'] = file_url
-
-#         return jsonify({
-#             'message': '文件上传成功',
-#             'file_url': file_url
-#         })
-    
-#     return jsonify({'error': '不允许的文件类型'}), 400
+# Vercel 需要的通配符路由处理
+@app.route('/<path:path>')
+def catch_all(path):
+    return app.wsgi_app(request.environ, lambda x, y: [])
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -113,6 +81,7 @@ def upload_file():
         })
     
     return jsonify({'error': '不允许的文件类型'}), 400
+
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):

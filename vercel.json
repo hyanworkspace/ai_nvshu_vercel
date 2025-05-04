@@ -2,17 +2,33 @@
   "version": 2,
   "builds": [
     {
-      "src": "app.py",
+      "src": "api/index.py",
       "use": "@vercel/python"
+    },
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "public"
+      }
     }
   ],
   "routes": [
     {
+      "src": "/static/(.*)",
+      "dest": "/public/$1"
+    },
+    {
+      "src": "/(.*\\.(js|css|svg|png|jpg|jpeg|gif|ico|json))",
+      "dest": "/public/$1"
+    },
+    {
       "src": "/(.*)",
-      "dest": "app.py"
+      "dest": "/api/index.py"
     }
   ],
   "env": {
+    "FLASK_ENV": "production",
     "HUGGINGFACE_TOKEN": "@huggingface_token"
   }
 } 

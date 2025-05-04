@@ -13,7 +13,7 @@ from PIL import Image
 import time
 # from langchain_google_genai import ChatGoogleGenerativeAI
 from huggingface_hub import InferenceClient
-HF_TOKEN = os.getenv('HF_TOKEN')
+HF_TOKEN = os.environ.get("HUGGINGFACE_TOKEN")
 
 # variables --------------------
 load_dotenv()  # 加载 .env 文件中的环境变量

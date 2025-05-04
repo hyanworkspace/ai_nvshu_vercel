@@ -7,12 +7,10 @@ from PIL import Image
 from io import BytesIO
 from config import Config
 from process_video import convert_webm_to_mp4
-from dotenv import load_dotenv
 from huggingface_hub import InferenceClient
 
-# 加载 .env 文件中的环境变量
-load_dotenv()
-HF_TOKEN = os.getenv('HF_TOKEN')
+# HF_TOKEN = os.getenv('HF_TOKEN')
+HF_TOKEN = os.environ.get("HUGGINGFACE_TOKEN")
 
 nvshu_ai = InferenceClient(
     provider="sambanova",
