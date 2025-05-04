@@ -28,7 +28,6 @@
     }
   ],
   "env": {
-    "FLASK_ENV": "production",
-    "HUGGINGFACE_TOKEN": "@huggingface_token"
+    "FLASK_ENV": "production"
   }
 } 
